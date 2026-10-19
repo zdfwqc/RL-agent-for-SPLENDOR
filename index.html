@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101d1c">
+  <title>璀璨宝石 · Splendor Lab</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='%23c7ab70' d='M10 6h20l8 12-18 19L2 18z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./browser-client.js"></script>
+</head>
+<body data-mode="duel">
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="璀璨宝石首页"><span class="brand-mark">◇</span><div><strong>SPLENDOR<span> LAB</span></strong><small>璀璨宝石 · 策略实验室</small></div></a>
+      <div class="top-status"><span class="live-dot"></span> 本地对局 <span class="separator">/</span> BROWSER AI</div>
+      <nav><a class="outline" href="#" data-download-record>导出对局记录</a><button class="quiet" data-cmd="rules">游戏指南 <span>↗</span></button><button class="outline" data-cmd="new">＋ 新对局</button></nav>
+    </header>
+    <main>
+      <section class="page-heading"><div><div class="eyebrow">THE RENAISSANCE OF STRATEGY</div><h1>一颗宝石，无限可能<span>。</span></h1><p>收集宝石，建立产业，让声望为你加冕。</p></div><div id="round-status" class="round-status"></div></section>
+      <p id="duel-status" class="hint"></p><div id="error" class="error-banner" role="alert" hidden></div>
+      <div class="game-layout">
+        <div class="table-column">
+          <section class="noble-section"><div class="section-heading"><h2>贵族来访 <span>NOBLES</span></h2><span class="hint">满足永久折扣 · 每回合至多 1 位</span></div><div id="nobles" class="nobles"></div></section>
+          <section class="market-section"><div class="section-heading"><h2>发展市场 <span>DEVELOPMENTS</span></h2><div class="legend"><span class="mini-gem">◇</span> 永久折扣 <span class="star">✦</span> 声望</div></div><div id="market" class="market"></div></section>
+          <section class="bank-section"><div class="section-heading"><h2>宝石银行 <span>TOKEN BANK</span></h2><span id="bank-hint" class="hint">点击筹码，规划本回合的拿取</span></div><div id="bank" class="bank"></div></section>
+        </div>
+        <aside class="sidebar"><section id="action-panel" class="action-panel" aria-live="polite"></section><section class="catalog-launcher"><div class="section-heading"><h2>卡牌图鉴</h2><span class="tiny-label">COLLECTION</span></div><p>90 张发展卡 · 10 位贵族<br>查阅费用、声望与永久折扣</p><button class="outline full" data-cmd="catalog">打开全卡牌图鉴 ↗</button></section><section class="log-panel"><div class="section-heading"><h2>对局记录</h2><span class="tiny-label">LIVE LOG</span></div><div id="logs" class="logs"></div></section></aside>
+      </div>
+      <section class="players-section"><div class="section-heading"><h2>商人席位 <span>MERCHANTS</span></h2><span class="hint">资产公开 · 预留仅自己可见</span></div><div id="players" class="players"></div></section>
+      <footer><span><i class="live-dot"></i> SPLENDOR LAB <span class="muted">/</span> 基础版 · 本地规则环境</span><span>15 分触发最后一轮 <span class="muted">·</span> 每位玩家回合数相同</span></footer>
+    </main>
+  </div>
+  <dialog id="new-dialog"><form id="new-form"><div class="eyebrow">A NEW BEGINNING</div><h2>开启一场新交易</h2><p>浏览器本地运行，每位访客独立对局。新建前可导出旧对局记录。</p><label>策略快照<select id="duel-checkpoint"><option value="best.pt">本站发布模型</option></select></label><label>你的席位<select id="human-seat"><option value="0">玩家1 · 先手</option><option value="1">玩家2</option><option value="2">玩家3</option><option value="3">玩家4</option></select></label><label>商人人数<select id="num-players"><option value="2">2 位玩家</option><option value="3">3 位玩家</option><option value="4">4 位玩家</option></select></label><label>随机种子 <span class="muted">留空随机</span><input id="seed" type="number" min="0" max="9007199254740991" step="1" placeholder="例如 42，可复现同一开局"></label><div class="dialog-actions"><button type="button" class="quiet" data-cmd="close-new">取消</button><button type="submit" class="primary">创建对局 →</button></div></form></dialog>
+  <dialog id="rules-dialog"><div class="eyebrow">HOW TO PLAY</div><h2>商人的第一课</h2><div class="rule-list"><p><b>01 · 每回合一个主动作</b>拿至多三种不同色宝石；或拿同色两枚（银行该色至少四枚）；或预留一张牌；或购买一张牌。</p><p><b>02 · 建立永久折扣</b>购入的发展卡提供一个对应颜色的永久折扣。支付先减折扣，黄金可替代任意色。可主动用黄金保留普通宝石。</p><p><b>03 · 为下一步预留</b>可预留市场牌或盲抽任意等级，最多三张。银行有黄金时同时获得一枚。预留牌只能购买，不能弃掉。</p><p><b>04 · 贵族与筹码上限</b>回合结束最多持有十枚筹码（含黄金），超出须归还。折扣满足贵族要求会自动获得，符合多位时选一位。</p><p><b>05 · 最后的交易</b>有人达到十五分后，完成当前轮。总分最高者获胜；同分时已购买牌更少者胜；仍同则共同获胜。</p></div><div class="rule-note">本环境允许少拿不同色宝石（1–3 色）。若银行空、预留已满且无牌可买，将明确报告无合法动作，需重开；不自动判胜或跳过。种子仅供调试，Hotseat 用于合作检验。</div><button class="primary full" data-cmd="close-rules">明白了，开始交易</button></dialog>
+  <dialog id="catalog-dialog" aria-labelledby="catalog-title"><div class="catalog-heading"><div><div class="eyebrow">THE CARD COLLECTION</div><h2 id="catalog-title">全卡牌图鉴</h2></div><button class="outline" data-cmd="close-catalog" aria-label="关闭卡牌图鉴">关闭 ×</button></div><p id="catalog-note"></p><div class="catalog-toolbar"><label for="catalog-tier">卡牌范围<select id="catalog-tier"><option value="0">全部发展卡</option><option value="1">一级发展卡</option><option value="2">二级发展卡</option><option value="3">三级发展卡</option><option value="nobles">全部贵族</option></select></label><label for="catalog-bonus">宝石颜色<select id="catalog-bonus"><option value="-1">全部颜色</option><option value="0">◇ 白钻</option><option value="1">◆ 蓝宝石</option><option value="2">⬡ 祖母绿</option><option value="3">◈ 红宝石</option><option value="4">⬟ 黑玛瑙</option></select></label><span id="catalog-count" role="status"></span></div><div id="catalog-grid" class="catalog-grid"></div><div class="catalog-footer"><span id="catalog-footer-note"></span><button id="catalog-reserve" class="primary" data-cmd="catalog-reserve" hidden>盲抽预留此等级 →</button></div></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
